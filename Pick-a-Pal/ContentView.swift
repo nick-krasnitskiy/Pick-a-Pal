@@ -11,6 +11,7 @@ struct ContentView: View {
     @State private var names = ["Elisha", "Andre", "Jasmine", "Po-Chun"]
     @State private var nameToAdd = ""
     @State private var pickedName = ""
+    @State private var shouldRemovePickedName = false
     
     var body: some View {
         VStack {
@@ -32,9 +33,17 @@ struct ContentView: View {
                 }
             Divider()
             
+            Toggle("Remove then picked", isOn: $shouldRemovePickedName)
+            
             Button("Pick Random Name") {
                 if let randonName = names.randomElement() {
                     pickedName = randonName
+                    
+                    if shouldRemovePickedName {
+                        names.removeAll { name in
+                            return (name == randonName)
+                        }
+                    }
                 } else {
                     pickedName = ""
                 }
